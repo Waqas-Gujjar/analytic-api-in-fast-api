@@ -1,11 +1,15 @@
 from typing import Union
-
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from api.events import router as events_router
+from api.db.sessions import init_db
 
-
+@asynccontextmanager
+async def lifespin(  app :FastAPI):
+    init_db
+    yield
 # Create the FastAPI application instance
-app = FastAPI()
+app = FastAPI(lifespin=lifespin)
 app.include_router(events_router, prefix="/api/events")
 
 

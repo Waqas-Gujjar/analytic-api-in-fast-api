@@ -5,3 +5,5 @@ sqlalchemy==2.0.41
 sqlmodel
 gunicorn
 timescaledb
+python-decouple
+psycopg[binary]
