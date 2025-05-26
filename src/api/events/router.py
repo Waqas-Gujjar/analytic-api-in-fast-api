@@ -2,6 +2,7 @@ from fastapi import APIRouter,Depends,HTTPException
 import json
 from sqlmodel import Session,select
 from api.db.sessions import get_session
+from api.events.models import get_utc_now
 
 
 from .models import ( 
@@ -53,6 +54,7 @@ def item_update (item_id:int, payload:ListUpdateSchema,session:Session = Depends
         if k == "id":
             continue
         setattr(obj,k,v)
+        obj.update_at(get_utc_now())
         session.add(obj)
         session.commit()
         session.refresh(obj)

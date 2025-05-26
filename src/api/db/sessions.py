@@ -1,22 +1,16 @@
 from .configs import DATABASE_URL
-from sqlmodel import SQLModel,Session
-import sqlmodel
-
-
+from sqlmodel import SQLModel, Session, create_engine
 
 if DATABASE_URL == "":
-    raise NotImplemented("DATABASE NEED TO SET ")
+    raise NotImplementedError("DATABASE_URL needs to be set")
 
-
-engin = sqlmodel.create_engine(DATABASE_URL)
-
+engine = create_engine(DATABASE_URL, echo=True)
 
 def init_db():
-    print("create database")
-    SQLModel.metadata.create_all(engin)
+    SQLModel.metadata.create_all(engine)
 
 def get_session():
-    with Session(engin) as session:
+    with Session(engine) as session:
         yield session
 
 

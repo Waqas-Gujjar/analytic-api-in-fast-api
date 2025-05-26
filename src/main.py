@@ -5,12 +5,12 @@ from api.events import router as events_router
 from api.db.sessions import init_db
 
 @asynccontextmanager
-async def lifespin(app: FastAPI):
-    init_db()  # Call the function to create tables
+async def lifespan(app: FastAPI):
+    # Initialize the database before app starts
+    init_db()
     yield
 
-# Create the FastAPI application instance
-app = FastAPI(lifespin=lifespin)  # Fix typo in lifespan parameter
+app = FastAPI(lifespan=lifespan)
 app.include_router(events_router, prefix="/api/events")
 
 @app.get("/")
@@ -23,4 +23,4 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 @app.get("/healthz")
 def health_check():
-    return{"status":"ok"}
+    return {"status": "ok"}
